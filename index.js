@@ -2,6 +2,7 @@ let setFevicon = () => {
   var favicon = document.querySelector("#favicon");
   var newIcon = favicon.cloneNode(true);
   newIcon.setAttribute("href", canvas.toDataURL());
+  console.log(canvas.toDataURL());
   favicon.parentNode.replaceChild(newIcon, favicon);
 };
 
@@ -106,7 +107,8 @@ let enemyArray = [];
 setInterval(() => {
   enemyX = 0;
   enemyY = 0;
-  let situation = Math.floor(Math.random() * 5);
+  let situation = Math.floor(Math.random() * 4);
+
   if (situation == 0) {
     enemyX = 0;
     enemyY = Math.random() * canvas.height;
@@ -124,6 +126,7 @@ setInterval(() => {
     enemyY = canvas.height;
   }
   theta = Math.atan((playerPosition.y - enemyY) / (playerPosition.x - enemyX));
+
   enemyArray.push(
     new Square(
       enemyX,
