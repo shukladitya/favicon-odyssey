@@ -2,7 +2,6 @@ let setFevicon = () => {
   var favicon = document.querySelector("#favicon");
   var newIcon = favicon.cloneNode(true);
   newIcon.setAttribute("href", canvas.toDataURL());
-  console.log(canvas.toDataURL());
   favicon.parentNode.replaceChild(newIcon, favicon);
 };
 
