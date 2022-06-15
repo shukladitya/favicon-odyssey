@@ -7,27 +7,99 @@
       href="images/favicon.ico"
       id="favicon"
     />
-    <title>Document</title>
+    <title id="title">PRESS SPACEBAR</title>
   </head>
   <body>
     <style>
-      body {
+      * {
+        box-sizing: border-box;
         margin: 0;
-      }
-      div {
-        position: absolute;
-        bottom: 2rem;
-        right: 2rem;
-        font-size: 4rem;
-        font-weight: bold;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
           Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      }
+      body {
+        margin: 0;
       }
       canvas {
         display: none;
       }
+      .background {
+        height: 100vh;
+        width: 100vw;
+        background-color: #000000;
+        background-image: linear-gradient(147deg, #000000 0%, #2c3e50 74%);
+      }
+      .page1 {
+        padding: 8rem;
+        color: white;
+        font-size: 2rem;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        flex-direction: column;
+        height: 100vh;
+      }
+      .page1 > div {
+        border: 2px solid white;
+        padding: 1rem 13rem;
+        border-radius: 2rem;
+      }
+      /* ///// */
+      .page2 {
+        color: white;
+        font-size: 4rem;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        flex-direction: column;
+        height: 100vh;
+        display: none;
+      }
+      .score {
+        font-size: 2rem;
+      }
+      .keys {
+        width: 10rem;
+        height: 10rem;
+        background-image: url("keys.png");
+        background-size: contain;
+        background-repeat: no-repeat;
+        filter: invert(100%);
+      }
+      /* ///// */
+      .page3 {
+        color: white;
+        font-size: 4rem;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        flex-direction: column;
+        height: 100vh;
+        display: none;
+      }
+      .page3 > div {
+        border: 2px solid white;
+        padding: 1rem 13rem;
+        border-radius: 2rem;
+      }
     </style>
     <canvas></canvas>
+    <div class="background">
+      <div class="page1">
+        <p>Look at the favicon 👆</p>
+        <p>and press</p>
+        <div>SPACE</div>
+      </div>
+      <div class="page2">
+        <div class="life">💙💙💙</div>
+        <div class="score">Score:12</div>
+        <div class="keys"></div>
+      </div>
+      <div class="page3">
+        <p class="highScore">High score: 0</p>
+        <div>SPACE</div>
+      </div>
+    </div>
     <script src="index.js"></script>
   </body>
 </html>

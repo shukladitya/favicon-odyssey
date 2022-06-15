@@ -1,3 +1,25 @@
+let startGame = false;
+let page = 0;
+document.addEventListener("keydown", (e) => {
+  if (e.code == "Space" && !startGame) {
+    startGame = true;
+    life = 3;
+    score = 0;
+    if (page == 0) {
+      page = 1;
+      document.querySelector(".page1").style.display = "none";
+      document.querySelector(".page2").style.display = "flex";
+    }
+    if (page == 2) {
+      page = 1;
+      document.querySelector(".page3").style.display = "none";
+      document.querySelector(".page2").style.display = "flex";
+      let hearts = "";
+      for (let i = 0; i < life; i++) hearts += "💙";
+      document.querySelector(".life").innerText = hearts;
+    }
+  }
+});
 let setFevicon = () => {
   var favicon = document.querySelector("#favicon");
   var newIcon = favicon.cloneNode(true);
@@ -5,12 +27,25 @@ let setFevicon = () => {
   favicon.parentNode.replaceChild(newIcon, favicon);
 };
 
+let score = 0;
+life = 3;
+lifeSwitch = false;
+let setScore = () => {
+  var title = document.querySelector("#title");
+  if (startGame) {
+    title.innerText = `SCORE: ${score}`;
+    document.querySelector(".score").innerText = `Score: ${score}`;
+  } else {
+    title.innerText = `PRESS SPACE`;
+  }
+};
+
 let colors = ["blue", "#F21170", "#FA9905", "#FF5200"];
 
 let canvas = document.querySelector("canvas");
 canvas.width = 16;
 canvas.height = 16;
-document.body.style.zoom = 30.0;
+// document.body.style.zoom = 30.0;
 
 let c = canvas.getContext("2d");
 
@@ -88,8 +123,32 @@ class Square {
       playerPosition.x < this.x + this.width &&
       playerPosition.y > this.y &&
       playerPosition.y < this.y + this.height
-    )
-      console.log("touching");
+    ) {
+      if (!lifeSwitch) {
+        life--;
+        let hearts = "";
+        for (let i = 0; i < life; i++) hearts += "💙";
+        document.querySelector(".life").innerText = hearts;
+        lifeSwitch = true;
+      }
+      setTimeout(() => {
+        lifeSwitch = false;
+      }, 1000);
+      console.log(life);
+      if (life == 0) {
+        page = 2;
+        startGame = false;
+        document.querySelector(".page2").style.display = "none";
+        document.querySelector(".page3").style.display = "flex";
+        if (localStorage["highscore"] == undefined)
+          localStorage["highscore"] = score;
+        else if (localStorage["highscore"] < score)
+          localStorage["highscore"] = score;
+        document.querySelector(
+          ".highScore"
+        ).innerText = `HighScore: ${localStorage["highscore"]}`;
+      }
+    }
   };
   updatePositionAndCheckTouch = () => {
     this.x += this.velocityX;
@@ -126,15 +185,22 @@ setInterval(() => {
   }
   theta = Math.atan((playerPosition.y - enemyY) / (playerPosition.x - enemyX));
 
+  if (theta < 0) theta = -theta;
+
+  vectorX = 0.1 * Math.cos(theta);
+  vectorY = 0.1 * Math.sin(theta);
+  if (enemyY > playerPosition.y) vectorY = -vectorY;
+  if (enemyX > playerPosition.x) vectorX = -vectorX;
   enemyArray.push(
     new Square(
       enemyX,
       enemyY,
-      0.1 * Math.cos(theta),
-      0.1 * Math.sin(theta),
+      vectorX,
+      vectorY,
       colors[Math.floor(Math.random() * 5)]
     )
   );
+  score++;
 }, 2000);
 
 let animate = () => {
@@ -143,7 +209,8 @@ let animate = () => {
   c.fillRect(0, 0, innerWidth, innerHeight);
   setFevicon();
 
-  player.updatePosition();
+  if (startGame) player.updatePosition();
+  setScore();
 
   enemyArray.forEach((ele) => {
     ele.updatePositionAndCheckTouch();
